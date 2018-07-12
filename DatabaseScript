@@ -1,0 +1,150 @@
+/*    ==Scripting Parameters==
+
+    Source Server Version : SQL Server 2014 (12.0.2269)
+    Source Database Engine Edition : Microsoft SQL Server Express Edition
+    Source Database Engine Type : Standalone SQL Server
+
+    Target Server Version : SQL Server 2017
+    Target Database Engine Edition : Microsoft SQL Server Standard Edition
+    Target Database Engine Type : Standalone SQL Server
+*/
+USE [master]
+GO
+/****** Object:  Database [WorksDB]    Script Date: 12.7.2018. 8:01:19 ******/
+CREATE DATABASE [WorksDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'New Database', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\New Database.mdf' , SIZE = 4288KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'New Database_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\New Database.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [WorksDB] SET COMPATIBILITY_LEVEL = 120
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [WorksDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [WorksDB] SET ANSI_NULL_DEFAULT ON 
+GO
+ALTER DATABASE [WorksDB] SET ANSI_NULLS ON 
+GO
+ALTER DATABASE [WorksDB] SET ANSI_PADDING ON 
+GO
+ALTER DATABASE [WorksDB] SET ANSI_WARNINGS ON 
+GO
+ALTER DATABASE [WorksDB] SET ARITHABORT ON 
+GO
+ALTER DATABASE [WorksDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [WorksDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [WorksDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [WorksDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [WorksDB] SET CURSOR_DEFAULT  LOCAL 
+GO
+ALTER DATABASE [WorksDB] SET CONCAT_NULL_YIELDS_NULL ON 
+GO
+ALTER DATABASE [WorksDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [WorksDB] SET QUOTED_IDENTIFIER ON 
+GO
+ALTER DATABASE [WorksDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [WorksDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [WorksDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [WorksDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [WorksDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [WorksDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [WorksDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [WorksDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [WorksDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [WorksDB] SET RECOVERY FULL 
+GO
+ALTER DATABASE [WorksDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [WorksDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [WorksDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [WorksDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [WorksDB] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+ALTER DATABASE [WorksDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+USE [WorksDB]
+GO
+/****** Object:  Table [dbo].[PersonDBT]    Script Date: 12.7.2018. 8:01:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PersonDBT](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
+	[Street] [nvarchar](50) NULL,
+	[Suite] [nvarchar](50) NULL,
+	[City] [nvarchar](50) NULL,
+	[ZipCode] [nvarchar](50) NULL,
+	[Website] [nvarchar](100) NULL,
+	[Phone] [nvarchar](50) NULL,
+	[DateTimeSaved] [datetime] NOT NULL,
+ CONSTRAINT [PK__Table__3214EC079A757A6C] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  StoredProcedure [dbo].[sproc_InsertBasePerson]    Script Date: 12.7.2018. 8:01:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[sproc_InsertBasePerson]
+@FirstName nvarchar(50),
+@LastName nvarchar(50),
+@Email nvarchar(100)
+AS
+BEGIN
+	INSERT INTO PersonDBT (FirstName, LastName, Email, DateTimeSaved)
+					values(@FirstName, @LastName, @Email, GETDATE())
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sproc_InsertFullPerson]    Script Date: 12.7.2018. 8:01:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[sproc_InsertFullPerson]
+@FirstName nvarchar(50),
+@LastName nvarchar(50),
+@Email nvarchar(100),
+@Street nvarchar(50),
+@Suite nvarchar(50),
+@City nvarchar(50),
+@ZipCode nvarchar(50),
+@Website nvarchar(100),
+@Phone nvarchar(50)
+AS
+BEGIN
+	INSERT INTO PersonDBT (FirstName, LastName, Email, Street, Suite, City, ZipCode, Website, Phone, DateTimeSaved)
+					values(@FirstName, @LastName, @Email, @Street, @Suite, @City, @ZipCode, @Website, @Phone, GETDATE())
+END
+GO
+USE [master]
+GO
+ALTER DATABASE [WorksDB] SET  READ_WRITE 
+GO
